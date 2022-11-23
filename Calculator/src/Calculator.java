@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class Calculator implements ActionListener {
 	
@@ -11,12 +12,15 @@ public class Calculator implements ActionListener {
 	JButton add, subtract, multiply, divide; // +, - , * , / buttons
 	JButton decimal, equal, delete, clear, neg; // other buttons
 	JPanel panel;
+
 	
 	Font font1 = new Font("Ink Free", Font.BOLD, 20);
 	
 	//num1 = first number insert, num2 = second number insert, result = the number shown
 	double num1 = 0, num2 = 0, result = 0; //default values
-	char operator;
+	char operator = '0';
+	boolean equalIsPress = false;
+	//double ans; //holds the last result
 	
 	//constructor
 	Calculator(){
@@ -25,6 +29,7 @@ public class Calculator implements ActionListener {
 		frame.setResizable(false);
 		frame.setLayout(null);
 		frame.setSize(400,500);
+		frame.getContentPane().setBackground(new Color(255,229,204));
 		//frame.pack(); // compute the size of the screen
 		frame.setLocationRelativeTo(null);
 		
@@ -32,6 +37,7 @@ public class Calculator implements ActionListener {
 		text.setBounds(50,25,300,50);
 		text.setFont(font1);
 		text.setEditable(false); //textfield is no longer edible
+		text.setBackground(Color.white);
 		
 		add = new JButton("+");
 		subtract = new JButton("-");
@@ -56,14 +62,16 @@ public class Calculator implements ActionListener {
 		for(int i = 0 ; i < 9 ; i++) {
 			function[i].addActionListener(this);
 			function[i].setFont(font1);
-			//function[i].setFocusable(false);
+			function[i].setFocusable(false);
+			function[i].setBackground(new Color(255,208,152));
 		}
 		
 		for(int i = 0 ; i < 10 ; i++) {
 			num[i] = new JButton(String.valueOf(i));
 			num[i].addActionListener(this);
 			num[i].setFont(font1);
-			//num[i].setFocusable(false);
+			num[i].setFocusable(false);
+			num[i].setBackground(new Color(255,208,152));
 		}
 		
 		neg.setBounds(60,400,65,40);
@@ -73,7 +81,7 @@ public class Calculator implements ActionListener {
 		panel = new JPanel();
 		panel.setBounds(50, 90, 300, 300);
 		panel.setLayout(new GridLayout(4,4,10,10)); //*
-		//panel.setBackground(Color.GRAY);
+		panel.setBackground(new Color(255,229,204));
 		
 		panel.add(num[1]);
 		panel.add(num[2]);
@@ -115,39 +123,55 @@ public class Calculator implements ActionListener {
 		
 		for(int i = 0 ; i<10 ; i++) {
 			if(e.getSource() == num[i]) {
+				if(equalIsPress == true) {
+					clear();
+					equalIsPress = false;
+				}
+				num2=Double.parseDouble(text.getText()+ i);
 				text.setText(text.getText().concat(String.valueOf(i)));
 			}
 		}
 		
-		if(e.getSource() == decimal) 
-			text.setText(text.getText().concat("."));
+		if(e.getSource() == decimal) { 
+			//if current textfield contains decimal, it won't add another decimal
+			if(!text.getText().contains(".")) {
+				text.setText(text.getText().concat("."));
+			}
+		}
 		
 		if(e.getSource() == add) {
+			equalIsPress = false;
+			
 			num1 = Double.parseDouble(text.getText());
 			operator = '+';
 			text.setText("");
 		}
 		
 		if(e.getSource() == subtract) {
+			equalIsPress = false;
+			
 			num1 = Double.parseDouble(text.getText());
 			operator = '-';
 			text.setText("");
 		}
 		
 		if(e.getSource() == multiply) {
+			equalIsPress = false;
+			
 			num1 = Double.parseDouble(text.getText());
 			operator = '*';
 			text.setText("");
 		}
 		
 		if(e.getSource() == divide) {
+			equalIsPress = false;
+			
 			num1 = Double.parseDouble(text.getText());
 			operator = '/';
 			text.setText("");
 		}
 		
 		if(e.getSource()== equal) {
-			num2=Double.parseDouble(text.getText());
 			
 			switch(operator) {
 			case '+':
@@ -162,14 +186,23 @@ public class Calculator implements ActionListener {
 			case '/':
 				result = num1 / num2;
 				break;
+			default:
+				result = num2;
+				break;
 			}
 			
 			text.setText(String.valueOf(result));
 			num1 = result;
+			//ans = result;
+			equalIsPress = true;
+			
 		}
+
 		
 		if(e.getSource() == clear) {
-			text.setText(String.valueOf(0));
+			//text.setText(String.valueOf(0));
+			num2 = 0;
+			clear();
 		}
 		if(e.getSource() == delete) {
 			String str = text.getText();
@@ -177,16 +210,30 @@ public class Calculator implements ActionListener {
 			for (int i = 0; i<str.length()-1 ; i++) {
 				text.setText(text.getText()+str.charAt(i));
 			}
+			operator = '0';
+			num2=Double.parseDouble(text.getText()); //set current number as num2
 		}
 		
 		if(e.getSource() == neg) {
-			//if(text.getText().equals(""))
-				//text.setText("-");
+			equalIsPress = false;
+			operator = 0;
+			
+			if(text.getText().equals(""))
+				text.setText("-");
+			
 			double temp = Double.parseDouble(text.getText());
+			if(text.getText()== "")
+				text.setText("-");
 			temp*=-1;
+			num2 = temp;
 			text.setText(String.valueOf(temp));
 		}
 		
+	}
+	
+	private void clear() {
+		operator = '0';
+		text.setText("");
 	}
 
 }
