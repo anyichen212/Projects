@@ -1,7 +1,0 @@
-Hammer 1050
-Screw 55
-ScrewDriver 845
-Lock 500
-Paint 800
-Door 5000
-Tile 1105
