@@ -34,8 +34,7 @@ public class Shopper implements Comparable<Shopper> {
 	
 	// the amount of money in cents that Shopper needs to pay the cashier in the hardware store.
     //the total cost of the items in the cart plus an additional 8.875% tax. 
-	//The price should be rounded to the nearest cent. 
-	//(reminder: the ceil function in the Math class, rounds up a double to the nearest integer). 
+	//The price should be rounded to the nearest cent.  
 	public int amountOwed() {
 		
 		int temp = (int)(sc.grandTotal()+ Math.ceil(sc.grandTotal()*0.08875));
