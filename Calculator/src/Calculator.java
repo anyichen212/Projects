@@ -1,44 +1,44 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
 public class Calculator implements ActionListener {
 	
 	JFrame frame;
 	JTextField text;
-	JButton[] num = new JButton[10];
-	JButton[] function = new JButton[9];
+	JButton[] num = new JButton[10]; // buttons 0 to 9
+	JButton[] function = new JButton[9]; //other buttons
 	JButton add, subtract, multiply, divide; // +, - , * , / buttons
 	JButton decimal, equal, delete, clear, neg; // other buttons
 	JPanel panel;
 
 	
-	Font font1 = new Font("Ink Free", Font.BOLD, 20);
+	Font font1 = new Font("Ink Free", Font.BOLD, 20); //edit font
 	
 	//num1 = first number insert, num2 = second number insert, result = the number shown
 	double num1 = 0, num2 = 0, result = 0; //default values
 	char operator = '0';
-	boolean equalIsPress = false;
+	boolean equalIsPress = false; //is equal the last button press
 	//double ans; //holds the last result
 	
 	//constructor
 	Calculator(){
-		frame = new JFrame("Calculator");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setResizable(false);
+		frame = new JFrame("Calculator"); //new jFrame title Calculator
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //pressing x with close the app
+		frame.setResizable(false); //not allowing resize
 		frame.setLayout(null);
-		frame.setSize(400,500);
-		frame.getContentPane().setBackground(new Color(255,229,204));
+		frame.setSize(400,500); //size of the app [400px width, 500px length]
+		frame.getContentPane().setBackground(new Color(255,229,204)); //set bg colors to frame
 		//frame.pack(); // compute the size of the screen
 		frame.setLocationRelativeTo(null);
 		
-		text = new JTextField();
+		text = new JTextField(); //new textfield - to display number
 		text.setBounds(50,25,300,50);
 		text.setFont(font1);
 		text.setEditable(false); //textfield is no longer edible
-		text.setBackground(Color.white);
+		text.setBackground(Color.white); //textfield bg color
 		
+		//bottons
 		add = new JButton("+");
 		subtract = new JButton("-");
 		multiply = new JButton("X");
@@ -59,6 +59,7 @@ public class Calculator implements ActionListener {
 		function[7] = clear;
 		function[8] = neg;
 		
+		//add other buttons setting
 		for(int i = 0 ; i < 9 ; i++) {
 			function[i].addActionListener(this);
 			function[i].setFont(font1);
@@ -66,6 +67,7 @@ public class Calculator implements ActionListener {
 			function[i].setBackground(new Color(255,208,152));
 		}
 		
+		//add number buttons setting
 		for(int i = 0 ; i < 10 ; i++) {
 			num[i] = new JButton(String.valueOf(i));
 			num[i].addActionListener(this);
@@ -78,6 +80,7 @@ public class Calculator implements ActionListener {
 		delete.setBounds(135,400,100,40);
 		clear.setBounds(240,400,100,40);
 		
+		//new panel to display all the buttons
 		panel = new JPanel();
 		panel.setBounds(50, 90, 300, 300);
 		panel.setLayout(new GridLayout(4,4,10,10)); //*
@@ -121,8 +124,10 @@ public class Calculator implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
 		
+		//check if number button is press, if yes add to textfield
 		for(int i = 0 ; i<10 ; i++) {
 			if(e.getSource() == num[i]) {
+				//if equal is the last button press, clear textfield when a num is press
 				if(equalIsPress == true) {
 					clear();
 					equalIsPress = false;
@@ -139,6 +144,8 @@ public class Calculator implements ActionListener {
 			}
 		}
 		
+		//if operation button is press, clear textfield(wait for next num for the operation) 
+		//and also set operation value
 		if(e.getSource() == add) {
 			equalIsPress = false;
 			
@@ -171,6 +178,7 @@ public class Calculator implements ActionListener {
 			text.setText("");
 		}
 		
+		//do calculation if equal is press
 		if(e.getSource()== equal) {
 			
 			switch(operator) {
@@ -198,12 +206,14 @@ public class Calculator implements ActionListener {
 			
 		}
 
-		
+		//if clear is press
 		if(e.getSource() == clear) {
 			//text.setText(String.valueOf(0));
 			num2 = 0;
 			clear();
 		}
+
+		//if delete is press, delete textfield number by one index
 		if(e.getSource() == delete) {
 			String str = text.getText();
 			text.setText("");
@@ -214,6 +224,7 @@ public class Calculator implements ActionListener {
 			num2=Double.parseDouble(text.getText()); //set current number as num2
 		}
 		
+		//if neg(-) is press, add - to the texfield and multiple it by -1
 		if(e.getSource() == neg) {
 			equalIsPress = false;
 			operator = 0;
@@ -231,6 +242,7 @@ public class Calculator implements ActionListener {
 		
 	}
 	
+	//clear textfield
 	private void clear() {
 		operator = '0';
 		text.setText("");
