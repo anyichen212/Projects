@@ -38,7 +38,7 @@ Fir La 2 2 Lock 1 Door
 - Downlowd the HardwareStore project
 - In your terminal
 ```
-cd HardwareStore/src
+cd /HardwareStore/src
 javac Main.java
 java Main
 ```
